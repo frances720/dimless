@@ -50,6 +50,25 @@ Dtstar_Fun = @(Lt,D1star,Lc) ((xstar-Lc).*(1-D1star.^(1/3))./Lt + 1).^3;
 Dtstarmin = Dtstar_Fun(Ltstarmin,D1starmin,Lcstarmin);
 Dtstarmax = Dtstar_Fun(Ltstarmax,D1starmax,Lcstarmax);
 
+dTmin = T2min - T1max;
+dTmax = T2max - T1min;
+
+Hmin = 1e3;
+Hmax = 6e3;
+
+Fmin = Hmin * Wtstarmin;
+Fmax = Hmax * Wtstarmax;
+
+gmstarmin = dTmin / Fmax;
+gmstarmax = dTmax / Fmin;
+
+rhostarmin = (rho_mmin - rho_smax) / rho_cmax;
+rhostarmax = (rho_mmax - rho_smin) / rho_cmin;
+
+wistarmin = (rho_mmin - rho_cmax) / (rho_mmax - rho_smin);
+wistarmax = (rho_mmax - rho_cmin) / (rho_mmin - rho_smax);
+
+
 % % % flexural rigidity
 % % D2star = 1;
 % % Dstarmin = (xstar > Lcstarmin).*D2star + (xstar < Lcstarmin-Ltstarmin).*D1starmin + ((xstar <= Lcstarmin) & (xstar >= (Lcstarmin-Ltstarmin))).*Dtstarmin;

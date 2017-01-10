@@ -1,4 +1,4 @@
-function Hstar = buildBlockLoad(xstar,dxstar,WtstarFin)
+function [Hstar,F] = buildBlockLoad(xstar,dxstar,WtstarFin)
 Hstar = zeros(size(xstar));
 
 if WtstarFin < dxstar
