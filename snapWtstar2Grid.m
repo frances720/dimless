@@ -1,3 +1,5 @@
 function WtstarFin = snapWtstar2Grid(dxstar,Wtstar)
-WtstarFin = round(Wtstar./dxstar).*dxstar;
+
+WtstarFin = round(Wtstar./dxstar) .* dxstar;
+
 end

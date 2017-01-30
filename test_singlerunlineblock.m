@@ -1,7 +1,7 @@
 % GOAL: find line load that could replace block load from rangefront
 
 %% width of the block load
-Wtstar = 2;
+Wtstar = 10;
 
 
 %% dimensionless space
@@ -37,21 +37,14 @@ hold on;
 
 
 %% run line load model between mid and end pts
-pts = 100;
 
-if pts > width
-    gap = 1;
-else
-    gap = round(width/pts);
-end
+wstarmat = zeros(length(xstar),width);
+diff = zeros(width,1);
 
-wstarmat = zeros(length(xstar),pts);
-diff = zeros(pts,1);
-
-for i = 1:pts
+for i = 1:width
     % advancing line load through the whole extent of block load
     Hstarline = zeros(size(xstar))';
-    Hstarline(gap*i) = 100;
+    Hstarline(i) = 100;
     
     % treat wstar to exclude the area under the block load
     wstarline = solveW(dxstar,Dstar,Hstarline);
@@ -70,8 +63,6 @@ end
 
 [bestfit,bestfitind] = min(diff);
 plot(xstar,-wstarmat(:,bestfitind));
-
-linepos = bestfitind * gap;
 
 axis([0,4,-1,0.2]);
 
