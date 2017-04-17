@@ -1,0 +1,41 @@
+% dimensionless space
+xstar = 0:0.01:20;
+dxstar = xstar(2)-xstar(1);
+
+D1 = 4e23;
+D2 = 2e23;
+
+rho_c = 2700;
+rho_m = 3300;
+rho_s = 2500;
+
+alpha = calcAlpha(D2,rho_m,rho_s);
+Wtstar = 250e3 / alpha;
+
+D1star = D1/D2;
+Lcstar = 800e3 / alpha;
+Ltstar = 800e3 / alpha;
+Dstar = computeDstar(xstar,D1star,Lcstar,Ltstar);
+
+%Hstar = buildLineLoad(xstar, dxstar, 0);
+H = zeros(size(xstar))';
+H(xstar < Wtstar) = 0.5e3;
+H(xstar < Wtstar/5) = H(xstar < Wtstar/5) + 1e3;
+H(1) = H(1) + 5.4e5;
+F = 0.7e3 * Wtstar;
+
+Hstar = H ./ F;
+
+wstar = solveW(dxstar,Dstar,Hstar);
+
+w0 = calcw0(rho_c,rho_m,rho_s,F);
+
+x = xstar .* alpha ./1000;
+w = wstar .* w0 ./ 1000;
+
+figure;
+plot(x,-w);
+hold on;
+plot(x,zeros(size(x))');
+axis([0,500,-11,1.5]);
+xlabel('distance from rangefront (km)');
