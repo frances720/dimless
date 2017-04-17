@@ -1,40 +1,38 @@
-% dimless model base
+% horizontal dimless model
 dxstar = 0.01;
 xstar = 0:dxstar:20;
 
 % dimless beam properties
 Lcstar = 4;
 Ltstar = 2;
-D1star = logspace(-3,0,20);
+D1star = logspace(-3,0,10);
 
-% dimless load properties
-Wtstar = 2:0.5:4;
-Hstar = zeros(size(xstar))';
+% load properties
+Wtstar = 0.1:0.1:0.5;
+H = zeros(size(xstar))';
+height = 3e3;
 
 ratio = zeros(length(D1star),length(Wtstar));
 
-% dimensional values for w0 and alpha
+% dimensional values
 rho_c = 2700;
 rho_m = 3300;
 rho_s = 2400;
+rho_star = calcRhoStar(rho_c,rho_m,rho_s);
+
 E = 70e9;
 v = 0.25;
 
 % elastic thickness of distal plate
-Te = 40e3;
+T2 = 10e3;
 
-D = calcD(Te,E,v);
+D = calcD(T2,E,v);
 alpha = calcAlpha(D,rho_m,rho_s);
 
 for j = 1:length(Wtstar)
     
-    % build dimless block load
-    Hstar(xstar < Wtstar(j)) = 1e3;
-    F = sum(Hstar) * dxstar;
-    Hstar = Hstar./F;
-    
-    % find w0
-    w0 = calcw0(rho_c,rho_m,rho_s,F);
+    % build block load
+    H(xstar < Wtstar(j)) = height;
     
     for i = 1:length(D1star)
         
@@ -42,16 +40,14 @@ for j = 1:length(Wtstar)
         Dstar = computeDstar(xstar,D1star(i),Lcstar,Ltstar);
         
         % solve for the dimless deflection
-        wstar = solveW(dxstar,Dstar,Hstar);
+        w = solveW_dimOnVertical(dxstar,Dstar,rho_star,H);
         
         % find dimless depth/width ratio
-        [depthstar,widthstar] = findDepthWidthofBasin(xstar,wstar,Wtstar(j));
+        [depth,widthstar] = findDepthWidthofBasin(xstar,w,Wtstar(j));
         
-        ratio(i,j) = (-depthstar/widthstar) * (w0/alpha);
+        ratio(i,j) = (-depth/widthstar) / alpha;
     end
 end
-
-
 
  figure;
 for k = 1:length(Wtstar)
@@ -59,5 +55,12 @@ for k = 1:length(Wtstar)
    hold on
 end
 hold on
+
+load('ratioFromBasin.mat');
+load('D1starFromBasin.mat');
+load('labels.mat');
 scatter(ratioFromBasin,D1starFromBasin);
 text(ratioFromBasin, D1starFromBasin + 0.02, labels)
+axis([0,0.12,0,1]);
+xlabel('basin depth/width (km)');
+ylabel('D1star');

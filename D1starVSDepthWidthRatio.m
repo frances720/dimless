@@ -8,7 +8,7 @@ Ltstar = 2;
 D1star = logspace(-3,0,20);
 
 % dimless load properties
-Wtstar = 3:0.5:5;
+Wtstar = 2:0.5:4;
 Hstar = zeros(size(xstar))';
 
 ratio = zeros(length(D1star),length(Wtstar));
@@ -29,9 +29,8 @@ alpha = calcAlpha(D,rho_m,rho_s);
 for j = 1:length(Wtstar)
     
     % build dimless block load
-    Hstar(xstar < Wtstar(j)) = 2e3;
-    F = sum(Hstar) * dxstar;
-    Hstar = Hstar ./ F;
+    height = 2e3;
+    Hstar(xstar < Wtstar(j)) = height;
     
     for i = 1:length(D1star)
         
@@ -44,14 +43,12 @@ for j = 1:length(Wtstar)
         % find dimless depth/width ratio
         [depthstar,widthstar] = findDepthWidthofBasin(xstar,wstar,Wtstar(j));
         
-        deltaT = calcdeltaT(D1star(i),T2);
-        w0 = calcw0(rho_c,rho_m,rho_s,deltaT);
+        % deltaT = calcdeltaT(D1star(i),T2);
+        w0 = calcw0fromV(height * Wtstar(j) * alpha,alpha,D);
         
         ratio(i,j) = (-depthstar/widthstar) * (w0/alpha);
     end
 end
-
-
 
  figure;
 for k = 1:length(Wtstar)
@@ -59,5 +56,8 @@ for k = 1:length(Wtstar)
    hold on
 end
 hold on
-scatter(ratioFromBasin,D1starFromBasin);
-text(ratioFromBasin, D1starFromBasin + 0.02, labels)
+% load('ratioFromBasin.mat');
+% load('D1starFromBasin.mat');
+% load('labels.mat');
+% scatter(ratioFromBasin,D1starFromBasin);
+% text(ratioFromBasin, D1starFromBasin + 0.02, labels)
