@@ -4,13 +4,8 @@ xstar = 0:dxstar:20; %
 
 %% range of Wtstar
 pts = 30; %
-Wtstar = linspace(dxstar,4,pts); %
+Wtstar = linspace(dxstar,5,pts); %
 WtstarFin = snapWtstar2Grid(dxstar,Wtstar); %
-
-% D1star = 0.125;
-% Lcstar = 3;
-% Ltstar = 2;
-% Dstar = computeDstar(xstar,D1star,Lcstar,Ltstar); %
 
 %%
 diffValueOfBestfit = zeros(pts,1); %
@@ -24,16 +19,18 @@ for j = 1:pts
     Hstar = (H./WtstarFin(j))'; %
     
     % run block load model
-    Dstar = 0.5 .* ones(size(xstar))'; %
+    Dstar = ones(size(xstar))'; %
     wstar = solveW(dxstar,Dstar,Hstar); %
     
     % find the rangefront index
     width = round(WtstarFin(j)/dxstar); %
     possibleRange = floor(width/2) + 1; %
     
+    cutoff = width;
+    
     % truncate w* to rangefront while maintaining vector length
-    wstar = wstar((width + 1):end); %
-    tail = zeros(width,1); %
+    wstar = wstar((cutoff+1):end); %
+    tail = zeros(cutoff,1); %
     wstar = cat(1,wstar,tail)'; %
     
     % normalize to wstar at xstar = 0
@@ -55,7 +52,7 @@ for j = 1:pts
         
         % treat wstar to exclude the area under the block load
         wstarline = solveW(dxstar,Dstar,Hstarline); %
-        wstarline = wstarline((width + 1):end); %
+        wstarline = wstarline((cutoff+1):end); %
         wstarline = cat(1,wstarline,tail)'; %
         
         % normalize to the deflection at xstar = 0
