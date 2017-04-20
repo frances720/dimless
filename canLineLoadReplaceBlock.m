@@ -1,7 +1,7 @@
 % GOAL: find line load that could replace block load from rangefront
 
 %% width of the block load
-Wtstar = 2;
+Wtstar = 10;
 
 
 %% dimensionless space
@@ -29,7 +29,9 @@ wstar = wstar ./ wstar(1); % normalize so that w* at x* = 0 is 1
 % find where the curve intersects with wstar = 0
 [forebulge,forebulgeind] = min(wstar);
 [zeroxing,zeroxingind] = min(abs(wstar(1:forebulgeind)));
-basinArea = sum(abs(wstar(1:zeroxingind)));
+% basinArea = sum(abs(wstar(1:zeroxingind)));
+wstarclip = wstar(1:zeroxingind);
+basinArea2 = wstarclip * wstarclip';
 
 figure;
 plot(xstar,-wstar,'k');
@@ -61,7 +63,9 @@ for i = 1:pts
     wstarline = wstarline ./ wstarline(1);
     
     % find the difference from block load curve
-    diff(i) = sum(abs(wstarline - wstar)) / basinArea;
+    e = wstarline - wstar;
+    l2norm = dot(e,e');
+    diff(i) = l2norm / basinArea2;
     
     wstarmat(:,i) = wstarline;
     %hold on
