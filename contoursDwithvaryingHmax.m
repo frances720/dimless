@@ -3,7 +3,7 @@ dxstar = 0.01;
 xstar = 0:dxstar:20;
 
 % beam properties
-D1star = ones(size(xstar));
+Dstar = ones(size(xstar))';
 Te = linspace(4,70,100) * 1e3;
 
 % load properties

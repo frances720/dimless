@@ -3,7 +3,7 @@ dxstar = 0.01;
 xstar = 0:dxstar:20;
 
 %% range of Wtstar
-Wtstar = linspace(dxstar,2,10);
+Wtstar = linspace(dxstar,6,10);
 WtstarFin = snapWtstar2Grid(dxstar,Wtstar); % make sure it falls on the finite mesh
 
 %%

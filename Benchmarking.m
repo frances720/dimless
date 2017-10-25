@@ -21,3 +21,4 @@ et = e';
 l2mat = et*e;
 
 plot(xstar,-wstar);
+grid on

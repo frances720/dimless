@@ -5,14 +5,14 @@ xstar = 0:dxstar:20;
 pt = 20; % number of data points 
 
 %D1star = linspace(1e-3,1,pt);
-D1star = logspace(log10(1e-3),log10(100),pt);
+D1star = logspace(-3,0,pt);
 Hstar = buildBlockLoad(xstar,dxstar,10);
 %Hstar = buildLineLoad(xstar);
 Lcstar = 11;
 Ltstar = 2;
 
 
-%wavelen = zeros(1,pt);
+wavelen = zeros(1,pt);
 amp = zeros(1,pt);
 %fbPos = zeros(1,pt);
 %fbHeight = zeros(1,pt);
@@ -32,10 +32,10 @@ for i = 1:pt
     wstar = solveW(dxstar,Dstar,Hstar);
     plot(xstar,-wstar);
      ww = -wstar;
-     %[vmax,imax] = max(ww);
+     [vmax,imax] = max(ww);
      [vmin,imin] = min(ww);
      amp(i) = -vmin;
-%     wavelen(i) = xstar(imax)-xstar(imin);
+     wavelen(i) = xstar(imax)-xstar(imin);
 %     fbPos(i) = xstar(imax);
      %fbHeight(i) = vmax;
      %[vcross,icross] = min(abs(ww(1:imax)));
@@ -54,7 +54,7 @@ figure;
 % subplot(2,2,2);
 %figure;
 %plot(D1star,amp,'k.-'); grid on
-loglog(D1star,amp,'k.-'); 
+loglog(D1star,wavelen,'k.-'); 
 %hold on
 grid on; 
 xlabel('D1star'); ylabel('w0star (amplitude)'); title('D1star-amplitutde');

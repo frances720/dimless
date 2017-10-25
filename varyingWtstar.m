@@ -4,8 +4,8 @@ xstar = 0:dxstar:20;
 pt = 100; % number of data points
 
 %Wtstar = linspace(dxstar,2000*dxstar,pt);
-%Wtstar = logspace(log10(dxstar),log10(2000*dxstar),pt);
-Wtstar = 10;
+Wtstar = logspace(log10(dxstar),log10(2000*dxstar),pt);
+%Wtstar = 10;
 WtstarFin = snapWtstar2Grid(dxstar,Wtstar);
 
 Dstar = ones(size(xstar))';
@@ -25,9 +25,9 @@ for i = 1:length(Wtstar)
     % plot(xstar,Hstar);
     % w0(i) = calcw0(2900,3350,2600,F);
 
-    hold on
+    %hold on
     wstar = solveW(dxstar,Dstar,Hstar);
-    plot(xstar,-wstar);
+    %plot(xstar,-wstar);
      ww = -wstar;
 %     [vmax,imax] = max(ww);
      [vmin,imin] = min(ww);
@@ -51,7 +51,7 @@ end
 % subplot(2,2,2);
 %figure;
 %plot(WtstarFin,amp,'k.-'); grid on
-%loglog(WtstarFin,amp,'k.-'); grid on
+loglog(WtstarFin,amp,'k.-'); grid on
 %xlabel('Wtstar'); ylabel('w0star (amplitude)'); title('Wtstar-amplitutde');
 
 % subplot(2,2,3); 
